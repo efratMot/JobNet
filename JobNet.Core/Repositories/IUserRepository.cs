@@ -9,7 +9,10 @@ namespace JobNet.Core.Repositories
 {
     public interface IUserRepository
     {
-        public List<User> GetAll();
+        public IEnumerable<User> GetAll();
 
+        public User Get(int id);
+
+        public User Add(User user);
     }
 }

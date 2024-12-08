@@ -9,6 +9,10 @@ namespace JobNet.Core.Services
 {
     public interface IJobService
     {
-        public List<Job> GetList();
+        public IEnumerable<Job> GetList();
+
+        public Job Get(int id);
+
+        public Job Add(Job job);
     }
 }

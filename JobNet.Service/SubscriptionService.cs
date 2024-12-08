@@ -17,13 +17,22 @@ namespace JobNet.Service
             _SubscriptionRepository = subscriptionRepository;
         }
 
-        public List<Subscription> GetList()
+        public IEnumerable<Subscription> GetList()
         {
             //לוגיקה עיסקית
             //קבלת נתונים מה db
             //לוגיקה עסקית
             return _SubscriptionRepository.GetAll();
+        }
 
+        public Subscription Get(int id)
+        {
+            return _SubscriptionRepository.Get(id);
+        }
+
+        public Subscription Add(Subscription subscription)
+        {
+            return _SubscriptionRepository.Add(subscription);
         }
     }
 }

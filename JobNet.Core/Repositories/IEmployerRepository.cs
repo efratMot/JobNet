@@ -9,8 +9,10 @@ namespace JobNet.Core.Repositories
 {
     public interface IEmployerRepository
     {
-        public List<Employer> GetAll();
+        public IEnumerable<Employer> GetAll();
 
+        public Employer Get(int id);
 
+        public Employer Add(Employer employer);
     }
 }

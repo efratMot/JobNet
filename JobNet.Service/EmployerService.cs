@@ -18,7 +18,7 @@ namespace JobNet.Service
             _EmployerRepository = employerRepository;
         }
 
-        public List<Employer> GetList()
+        public IEnumerable<Employer> GetList()
         {
             //לוגיקה עיסקית
             //קבלת נתונים מה db
@@ -26,5 +26,15 @@ namespace JobNet.Service
             return _EmployerRepository.GetAll();
 
         }
+        public Employer Get(int id)
+        {
+            return _EmployerRepository.Get(id);
+        }
+
+        public Employer Add(Employer employer)
+        {
+            return _EmployerRepository.Add(employer);
+        }
+
     }
 }

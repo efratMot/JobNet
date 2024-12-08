@@ -9,6 +9,10 @@ namespace JobNet.Core.Services
 {
     public interface IRequestService
     {
-        public List<Request> GetList();
+        public IEnumerable<Request> GetList();
+
+        public Request Get(int id);
+
+        public Request Add(Request request);
     }
 }

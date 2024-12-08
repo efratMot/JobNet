@@ -17,13 +17,22 @@ namespace JobNet.Service
             _RequestRepository = requestRepository;
         }
 
-        public List<Request> GetList()
+        public IEnumerable<Request> GetList()
         {
             //לוגיקה עיסקית
             //קבלת נתונים מה db
             //לוגיקה עסקית
             return _RequestRepository.GetAll();
+        }
 
+        public Request Get(int id)
+        {
+            return _RequestRepository.Get(id);
+        }
+
+        public Request Add(Request request)
+        {
+            return _RequestRepository.Add(request);
         }
     }
 }

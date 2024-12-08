@@ -9,7 +9,11 @@ namespace JobNet.Core.Repositories
 {
     public interface IRequestRepository
     {
-        public List<Request> GetAll();
+        public IEnumerable<Request> GetAll();
+
+        public Request Get(int id);
+
+        public Request Add(Request request);
 
     }
 }

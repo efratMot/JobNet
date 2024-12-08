@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace JobNet.Data.Repositories
 {
-    public class UserRepository:IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
 
@@ -16,9 +16,21 @@ namespace JobNet.Data.Repositories
         {
             _context = context;
         }
-        public List<User> GetAll()
+        public IEnumerable<User> GetAll()
         {
-            return _context.Users.ToList();
+            return _context.Users.Where(s => !string.IsNullOrEmpty(s.UserName));
+        }
+
+        public User Get(int id)
+        {
+            return _context.Users.FirstOrDefault(s => s.UserID == id);
+        }
+
+        public User Add(User user)
+        {
+            _context.Users.Add(user);
+            _context.SaveChanges();
+            return user;
         }
     }
 }

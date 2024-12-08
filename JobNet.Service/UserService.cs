@@ -17,13 +17,22 @@ namespace JobNet.Service
             _UserRepository = userRepository;
         }
 
-        public List<User> GetList()
+        public IEnumerable<User> GetList()
         {
             //לוגיקה עיסקית
             //קבלת נתונים מה db
             //לוגיקה עסקית
             return _UserRepository.GetAll();
+        }
 
+        public User Get(int id)
+        {
+            return _UserRepository.Get(id);
+        }
+
+        public User Add(User user)
+        {
+            return _UserRepository.Add(user);
         }
     }
 }

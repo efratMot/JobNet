@@ -16,9 +16,21 @@ namespace JobNet.Data.Repositories
         {
             _context = context;
         }
-        public List<Employer> GetAll()
+        public IEnumerable<Employer> GetAll()
         {
-            return _context.Employers.ToList();
+            return _context.Employers.Where(e => !string.IsNullOrEmpty(e.CompanyName)) ;
+        }
+
+        public Employer Get(int id)
+        {
+            return _context.Employers.FirstOrDefault(s => s.EmployerID == id);
+        }
+
+        public Employer Add(Employer employer)
+        {
+            _context.Employers.Add(employer);
+            _context.SaveChanges();
+            return employer;
         }
     }
 }

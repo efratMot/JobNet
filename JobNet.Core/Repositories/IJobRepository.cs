@@ -9,7 +9,11 @@ namespace JobNet.Core.Repositories
 {
     public interface IJobRepository
     {
-        public List<Job> GetAll();
+        public IEnumerable<Job> GetAll();
+
+        public Job Get(int id);
+
+        public Job Add(Job job);
 
     }
 }
