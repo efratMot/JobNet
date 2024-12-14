@@ -68,5 +68,6 @@ namespace JobNet.Controllers
         //    int index = _employerService.GetList().FindIndex(x => x.EmployerID == id);
         //    _employerService.GetList().RemoveAt(index);
         //}
+
     }
 }
