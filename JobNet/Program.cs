@@ -1,3 +1,4 @@
+using JobNet.Core;
 using JobNet.Core.Repositories;
 using JobNet.Core.Services;
 using JobNet.Data;
@@ -31,6 +32,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddDbContext<DataContext>();
 
 var app = builder.Build();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -1,5 +1,8 @@
-﻿using JobNet.Core.Entities;
+﻿using AutoMapper;
+using JobNet.Core.DTOs;
+using JobNet.Core.Entities;
 using JobNet.Core.Services;
+using JobNet.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,10 +14,12 @@ namespace JobNet.Controllers
     public class JobsController : ControllerBase
     {
         private readonly IJobService _jobService;
+        private readonly IMapper _mapper;
 
-        public JobsController(IJobService jobService)
+        public JobsController(IJobService jobService, IMapper mapper)
         {
             _jobService = jobService;
+            _mapper = mapper;
         }
 
 
@@ -35,19 +40,20 @@ namespace JobNet.Controllers
             {
                 return NotFound();
             }
-            return Ok(job);
+            var jobDto = _mapper.Map<JobDto>(job);
+            return Ok(jobDto);
         }
 
         // POST api/<JobsController>
         [HttpPost]
-        public ActionResult Post([FromBody] Job value)
+        public ActionResult Post([FromBody] JobPostModel value)
         {
-            var job = _jobService.Get(value.JobID);
-            if (job == null)
-            {
-                return Ok(_jobService.Add(value));
-            }
-            return Conflict();
+            var job = new Job { EmployerID = value.EmployerID, Description = value.Description, Title = value.Title, Location = value.Location, Salary = value.Salary, PostedDate = value.PostedDate };
+            //if (job == null)
+            //{
+                return Ok(_jobService.Add(job));
+            //}
+            //return Conflict();
         }
 
 

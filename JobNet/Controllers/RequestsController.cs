@@ -1,5 +1,6 @@
 ﻿using JobNet.Core.Entities;
 using JobNet.Core.Services;
+using JobNet.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -39,14 +40,14 @@ namespace JobNet.Controllers
 
         // POST api/<RequestsController>
         [HttpPost]
-        public ActionResult Post([FromBody] Request value)
+        public ActionResult Post([FromBody] RequestPostModel value)
         {
-            var request = _requestService.Get(value.RequestID);
-            if (request == null)
-            {
-                return Ok(_requestService.Add(value));
-            }
-            return Conflict();
+            var request = new Request { JobID=value.JobID,UserID = value.UserID,Message=value.Message,RequestDate=value.RequestDate };
+            //if (request == null)
+            //{
+              return Ok(_requestService.Add(request));
+            //}
+            //return Conflict();
         }
 
         // PUT api/<RequestsController>/5

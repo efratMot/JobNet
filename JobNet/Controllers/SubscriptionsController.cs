@@ -1,5 +1,6 @@
 ﻿using JobNet.Core.Entities;
 using JobNet.Core.Services;
+using JobNet.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -37,14 +38,14 @@ namespace JobNet.Controllers
 
         // POST api/<JobsController>
         [HttpPost]
-        public ActionResult Post([FromBody] Subscription value)
+        public ActionResult Post([FromBody] SubsciptionPostModel value)
         {
-            var subscription = _subscriptionService.Get(value.SubscriberID);
-            if (subscription == null)
-            {
-                return Ok(_subscriptionService.Add(value));
-            }
-            return Conflict();
+            var subscription =new Subscription { UserId=value.UserId,SubscriptionDate=value.SubscriptionDate};
+            //if (subscription == null)
+            //{
+              return Ok(_subscriptionService.Add(subscription));
+            //}
+            //return Conflict();
         }
 
         // PUT api/<JobsController>/5
