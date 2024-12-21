@@ -27,8 +27,9 @@ namespace JobNet.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-
-            return Ok(_jobService.GetList());
+            var list = _jobService.GetList();
+            var listDto = _mapper.Map<IEnumerable<JobDto>>(list);
+            return Ok(listDto);
         }
 
         // GET api/<JobsController>/5

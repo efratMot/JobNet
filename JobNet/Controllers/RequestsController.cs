@@ -1,4 +1,6 @@
-﻿using JobNet.Core.Entities;
+﻿using AutoMapper;
+using JobNet.Core.DTOs;
+using JobNet.Core.Entities;
 using JobNet.Core.Services;
 using JobNet.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,19 +13,22 @@ namespace JobNet.Controllers
     [ApiController]
     public class RequestsController : ControllerBase
     {
-
+        private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
 
-        public RequestsController(IRequestService requestService)
+        public RequestsController(IRequestService requestService,IMapper mapper)
         {
             _requestService = requestService;
+            _mapper = mapper;
         }
 
         // GET: api/<RequestsController>
         [HttpGet]
         public ActionResult Get()
         {
-            return Ok(_requestService.GetList());
+            var list = _requestService.GetList();
+            var listDto=_mapper.Map<IEnumerable<RequestDto>>(list);
+            return Ok(listDto);
         }
 
         // GET api/<RequestsController>/5
@@ -35,7 +40,8 @@ namespace JobNet.Controllers
             {
                 return NotFound();
             }
-            return Ok(request);
+            var requestDto=_mapper.Map<RequestDto>(request);
+            return Ok(requestDto);
         }
 
         // POST api/<RequestsController>

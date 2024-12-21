@@ -13,11 +13,11 @@ namespace JobNet.Core
     {
         public MappingProfile()
         {
-            //CreateMap<Employer, EmployerDto>().ReverseMap();
+            CreateMap<Employer, EmployerDto>().ReverseMap();
             CreateMap<Job, JobDto>().ReverseMap();
             CreateMap<Request, RequestDto>().ReverseMap();
             CreateMap<Subscription, SubscriptionDto>().ReverseMap();
-            //CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
         }
     }
 }

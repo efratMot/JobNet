@@ -13,6 +13,8 @@ namespace JobNet.Core.DTOs
 
         public int EmployerID { get; set; }
 
+        public EmployerDto Employer { get; set; }
+
         public string Title { get; set; }
 
         public string Description { get; set; }

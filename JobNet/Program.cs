@@ -4,6 +4,7 @@ using JobNet.Core.Services;
 using JobNet.Data;
 using JobNet.Data.Repositories;
 using JobNet.Service;
+using AutoMapper;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -30,10 +31,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 //builder.Services.AddSingleton<DataContext>();
 builder.Services.AddDbContext<DataContext>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 
-builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
 // Configure the HTTP request pipeline.

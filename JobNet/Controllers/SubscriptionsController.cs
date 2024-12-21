@@ -1,4 +1,6 @@
-﻿using JobNet.Core.Entities;
+﻿using AutoMapper;
+using JobNet.Core.DTOs;
+using JobNet.Core.Entities;
 using JobNet.Core.Services;
 using JobNet.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -12,16 +14,20 @@ namespace JobNet.Controllers
     public class SubscriptionsController : ControllerBase
     {
         private readonly ISubscriptionService _subscriptionService;
+        private readonly IMapper _mapper;
 
-        public SubscriptionsController(ISubscriptionService subscriptionService)
+        public SubscriptionsController(ISubscriptionService subscriptionService,IMapper mapper)
         {
             _subscriptionService = subscriptionService;
+            _mapper = mapper;
         }
         // GET: api/<JobsController>
         [HttpGet]
         public ActionResult Get()
         {
-            return Ok(_subscriptionService.GetList());
+            var list=_subscriptionService.GetList();
+            var listDto = _mapper.Map<IEnumerable<SubscriptionDto>>(list);
+            return Ok(listDto);
         }
 
         // GET api/<JobsController>/5
@@ -33,7 +39,7 @@ namespace JobNet.Controllers
             {
                 return NotFound();
             }
-            return Ok(subscription);
+            return Ok(_mapper.Map<SubscriptionDto>(subscription));
         }
 
         // POST api/<JobsController>
