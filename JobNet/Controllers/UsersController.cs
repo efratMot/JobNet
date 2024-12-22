@@ -1,4 +1,6 @@
-﻿using JobNet.Core.Entities;
+﻿using AutoMapper;
+using JobNet.Core.DTOs;
+using JobNet.Core.Entities;
 using JobNet.Core.Services;
 using JobNet.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -12,17 +14,20 @@ namespace JobNet.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-
-        public UsersController(IUserService userService)
+        private readonly IMapper _mapper;
+        public UsersController(IUserService userService,IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
        
         // GET api/<UsersController>/5
         [HttpGet]
-        public ActionResult Get()
+        public async Task< ActionResult> Get()
         {
-            return Ok(_userService.GetList());
+            var user = await _userService.GetAllAsync();
+            var usersDto = _mapper.Map<IEnumerable<UserDto>>(user);
+            return Ok(usersDto);
         }
 
         // GET api/<UsersController>/5
@@ -34,17 +39,20 @@ namespace JobNet.Controllers
             {
                 return NotFound();
             }
-            return Ok(user);
+            var userDto = _mapper.Map<UserDto>(user);
+            return Ok(userDto);
         }
 
         // POST api/<UsersController>
         [HttpPost]
-        public ActionResult Post([FromBody] UserPostModel value)
+        public async Task<ActionResult> Post([FromBody] User value)
         {
-            var user = new User {UserName=value.UserName,Password=value.Password, Email = value.Email,Role=value.Role };
+            //var user = _userService.Get(value.UserID);
             //if (user == null)
             //{
-                return Ok(_userService.Add(user));
+            var user = new User { UserID = value.UserID, UserName = value.UserName, Email = value.Email, Password = value.Password, Role = value.Role };
+            var u = await _userService.AddAsync(user);
+            return Ok(u);
             //}
             //return Conflict();
         }

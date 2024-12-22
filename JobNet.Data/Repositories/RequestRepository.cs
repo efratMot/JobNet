@@ -17,20 +17,20 @@ namespace JobNet.Data.Repositories
         {
             _context = context;
         }
-        public IEnumerable<Request> GetAll()
+        public async Task<IEnumerable<Request>> GetAllAsync()
         {
-            return _context.Requests.Where(s => !string.IsNullOrEmpty(s.Message)).Include(s => s.Job).Include(s => s.User);
+            return await _context.Requests.Where(s => !string.IsNullOrEmpty(s.Message)).Include(s => s.User).Include(s => s.Job).Include(s => s.Job.Employer).ToListAsync();
         }
 
         public Request Get(int id)
         {
-            return _context.Requests.Include(s => s.Job).Include(s => s.User).First(s => s.RequestID == id);
+            return _context.Requests.Include(s => s.User).Include(s => s.Job).Include(s=>s.Job.Employer).First(s => s.RequestID == id);
         }
 
-        public Request Add(Request request)
+        public async Task<Request> AddAsync(Request request)
         {
             _context.Requests.Add(request);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return request;
         }
     }

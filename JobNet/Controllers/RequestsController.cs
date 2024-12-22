@@ -24,11 +24,11 @@ namespace JobNet.Controllers
 
         // GET: api/<RequestsController>
         [HttpGet]
-        public ActionResult Get()
+        public async Task<ActionResult> Get()
         {
-            var list = _requestService.GetList();
-            var listDto=_mapper.Map<IEnumerable<RequestDto>>(list);
-            return Ok(listDto);
+            var requests = await _requestService.GetAllAsync();
+            var requestsDto = _mapper.Map<IEnumerable<RequestDto>>(requests);
+            return Ok(requestsDto);
         }
 
         // GET api/<RequestsController>/5
@@ -46,12 +46,14 @@ namespace JobNet.Controllers
 
         // POST api/<RequestsController>
         [HttpPost]
-        public ActionResult Post([FromBody] RequestPostModel value)
+        public async Task<ActionResult> Post([FromBody] Request value)
         {
-            var request = new Request { JobID=value.JobID,UserID = value.UserID,Message=value.Message,RequestDate=value.RequestDate };
+            //var request = _requestService.Get(value.RequestID);
             //if (request == null)
             //{
-              return Ok(_requestService.Add(request));
+            var request = new Request { RequestID = value.RequestID, JobID = value.JobID, UserID = value.UserID, Message = value.Message, RequestDate = value.RequestDate };
+            var r = await _requestService.AddAsync(request);
+            return Ok(r);
             //}
             //return Conflict();
         }

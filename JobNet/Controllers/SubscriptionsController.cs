@@ -23,9 +23,9 @@ namespace JobNet.Controllers
         }
         // GET: api/<JobsController>
         [HttpGet]
-        public ActionResult Get()
+        public async Task<ActionResult> Get()
         {
-            var list=_subscriptionService.GetList();
+            var list= await _subscriptionService.GetAllAsync();
             var listDto = _mapper.Map<IEnumerable<SubscriptionDto>>(list);
             return Ok(listDto);
         }
@@ -44,12 +44,14 @@ namespace JobNet.Controllers
 
         // POST api/<JobsController>
         [HttpPost]
-        public ActionResult Post([FromBody] SubsciptionPostModel value)
+        public async Task<ActionResult> Post([FromBody] Subscription value)
         {
-            var subscription =new Subscription { UserId=value.UserId,SubscriptionDate=value.SubscriptionDate};
+            //var subscription = _subscriptionService.Get(value.SubscriberID);
             //if (subscription == null)
             //{
-              return Ok(_subscriptionService.Add(subscription));
+            var subscription = new Subscription { SubscriberID = value.SubscriberID, UserId = value.UserId, SubscriptionDate = value.SubscriptionDate };
+            var s = await _subscriptionService.AddAsync(subscription);
+            return Ok(s);
             //}
             //return Conflict();
         }

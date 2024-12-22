@@ -17,9 +17,9 @@ namespace JobNet.Data.Repositories
         {
             _context = context;
         }
-        public IEnumerable<Job> GetAll()
+        public async Task<IEnumerable<Job>> GetAllAsync()
         {
-            return _context.Jobs.Where(j => !string.IsNullOrEmpty(j.Title)).Include(j => j.Employer);
+            return await _context.Jobs.Where(s => !string.IsNullOrEmpty(s.Title)).Include(s => s.Employer).ToListAsync();
         }
 
         public Job Get(int id)
@@ -27,10 +27,10 @@ namespace JobNet.Data.Repositories
             return _context.Jobs.Include(j => j.Employer).First(j => j.JobID == id);
         }
 
-        public Job Add(Job job)
+        public async Task<Job> AddAsync(Job job)
         {
             _context.Jobs.Add(job);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return job;
         }
     }
