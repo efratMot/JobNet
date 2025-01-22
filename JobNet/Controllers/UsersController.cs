@@ -45,12 +45,12 @@ namespace JobNet.Controllers
 
         // POST api/<UsersController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] User value)
+        public async Task<ActionResult> Post([FromBody] UserPostModel value)
         {
             //var user = _userService.Get(value.UserID);
             //if (user == null)
             //{
-            var user = new User { UserID = value.UserID, UserName = value.UserName, Email = value.Email, Password = value.Password, Role = value.Role };
+            var user = _mapper.Map<User>(value);
             var u = await _userService.AddAsync(user);
             return Ok(u);
             //}
@@ -70,12 +70,12 @@ namespace JobNet.Controllers
         //}
 
         // DELETE api/<UsersController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //    int index = _userService.GetList().FindIndex(x => x.UserID == id);
-        //    _userService.GetList().RemoveAt(index);
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var user = await _userService.DeleteAsync(id);
+            return Ok(user);
 
-        //}
+        }
     }
 }

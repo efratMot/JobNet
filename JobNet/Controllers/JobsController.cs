@@ -49,7 +49,7 @@ namespace JobNet.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] JobPostModel value)
         {
-            var job = new Job { EmployerID = value.EmployerID, Description = value.Description, Title = value.Title, Location = value.Location, Salary = value.Salary, PostedDate = value.PostedDate };
+            var job=_mapper.Map<Job>(value);
             //if (job == null)
             //{
             var j = await _jobService.AddAsync(job);
@@ -76,11 +76,11 @@ namespace JobNet.Controllers
         //    }
 
         //    // DELETE api/<JobsController>/5
-        //    [HttpDelete("{id}")]
-        //    public void Delete(int id)
-        //    {
-        //        var index = _jobService.GetList().FindIndex(e => e.JobID == id);
-        //        _jobService.GetList().Remove(_jobService.GetList()[index]);
-        //    }
+         [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var job = await _jobService.DeleteAsync(id);
+            return Ok(job);
+        }
     }
 }

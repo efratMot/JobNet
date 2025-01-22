@@ -1,4 +1,5 @@
-﻿using JobNet.Core.Entities;
+﻿using AutoMapper;
+using JobNet.Core.Entities;
 using JobNet.Core.Services;
 using JobNet.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,11 @@ namespace JobNet.Controllers
     public class EmployersController : ControllerBase
     {
         private readonly IEmployerService _employerService;
-
-        public EmployersController(IEmployerService employerService)
+        private readonly IMapper _mapper;
+        public EmployersController(IEmployerService employerService,IMapper mapper)
         {
             _employerService = employerService;
+            _mapper = mapper;
         }
 
 
@@ -43,9 +45,9 @@ namespace JobNet.Controllers
 
         // POST api/<EmployersController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Employer value)
+        public async Task<ActionResult> Post([FromBody] EmployerPostModel value)
         {
-            var employer= new Employer {UserID=value.UserID,CompanyName=value.CompanyName, Industry=value.Industry };
+            var employer= _mapper.Map<Employer>(value);
             //if (employer == null)
             //{
             var e = await _employerService.AddAsync(employer);
@@ -67,12 +69,12 @@ namespace JobNet.Controllers
         //}
 
         //// DELETE api/<EmployersController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //    int index = _employerService.GetList().FindIndex(x => x.EmployerID == id);
-        //    _employerService.GetList().RemoveAt(index);
-        //}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+           var employer= await _employerService.DeleteAsync(id);
+            return Ok(employer);
+        }
 
     }
 }

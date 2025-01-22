@@ -46,12 +46,12 @@ namespace JobNet.Controllers
 
         // POST api/<RequestsController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Request value)
+        public async Task<ActionResult> Post([FromBody] RequestPostModel value)
         {
             //var request = _requestService.Get(value.RequestID);
             //if (request == null)
             //{
-            var request = new Request { RequestID = value.RequestID, JobID = value.JobID, UserID = value.UserID, Message = value.Message, RequestDate = value.RequestDate };
+            var request = _mapper.Map<Request>(value);
             var r = await _requestService.AddAsync(request);
             return Ok(r);
             //}
@@ -72,11 +72,11 @@ namespace JobNet.Controllers
         //}
 
         //// DELETE api/<RequestsController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //    var index = _requestService.GetList().FindIndex(e => e.RequestID == id);
-        //    _requestService.GetList().Remove(_requestService.GetList()[index]);
-        //}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var request = await _requestService.DeleteAsync(id);
+            return Ok(request);
+        }
     }
 }

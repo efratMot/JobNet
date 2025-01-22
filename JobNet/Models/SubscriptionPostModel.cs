@@ -2,7 +2,7 @@
 
 namespace JobNet.Models
 {
-    public class SubsciptionPostModel
+    public class SubscriptionPostModel
     {
         public int UserId { get; set; }
         public DateTime SubscriptionDate { get; set; }
