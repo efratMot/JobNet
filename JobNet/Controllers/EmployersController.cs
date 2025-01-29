@@ -2,6 +2,7 @@
 using JobNet.Core.Entities;
 using JobNet.Core.Services;
 using JobNet.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration.UserSecrets;
 
@@ -11,6 +12,8 @@ namespace JobNet.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class EmployersController : ControllerBase
     {
         private readonly IEmployerService _employerService;
