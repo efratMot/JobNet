@@ -17,9 +17,11 @@ namespace JobNet.Controllers
     public class EmployersController : ControllerBase
     {
         private readonly IEmployerService _employerService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public EmployersController(IEmployerService employerService,IMapper mapper)
+        public EmployersController(IEmployerService employerService,IMapper mapper,IUserService userService)
         {
+            _userService = userService;
             _employerService = employerService;
             _mapper = mapper;
         }
@@ -50,13 +52,18 @@ namespace JobNet.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] EmployerPostModel value)
         {
+            var user=new User { UserName = value.UserName,Password=value.Password,Email=value.Email,Role=eRole.employer };
+            var User= await _userService.AddAsync(user);
             var employer= _mapper.Map<Employer>(value);
-            //if (employer == null)
+            employer.User = User;
+            employer.UserID=User.UserID;
+            //if (employer != null)
             //{
+            //   return Conflict();
+            //}
+
             var e = await _employerService.AddAsync(employer);
             return Ok(e);
-            //}
-            //return Conflict();
         }
 
         // PUT api/<EmployersController>/5

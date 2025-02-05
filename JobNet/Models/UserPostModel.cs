@@ -1,4 +1,6 @@
-﻿namespace JobNet.Models
+﻿using JobNet.Core.Entities;
+
+namespace JobNet.Models
 {
     public class UserPostModel
     {
@@ -9,6 +11,6 @@
 
         public string Email { get; set; }
 
-        public string Role { get; set; }
+        public eRole Role { get; set; }
     }
 }
