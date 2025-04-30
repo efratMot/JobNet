@@ -3,6 +3,7 @@ using JobNet.Core.DTOs;
 using JobNet.Core.Entities;
 using JobNet.Core.Services;
 using JobNet.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,6 +24,7 @@ namespace JobNet.Controllers
        
         // GET api/<UsersController>/5
         [HttpGet]
+        [Authorize(Roles = "manager")]
         public async Task< ActionResult> Get()
         {
             var user = await _userService.GetAllAsync();
@@ -32,6 +34,7 @@ namespace JobNet.Controllers
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "manager, employer")]
         public ActionResult Get(int id)
         {
             var user = _userService.Get(id);
@@ -58,19 +61,18 @@ namespace JobNet.Controllers
         }
 
         // PUT api/<UsersController>/5
-        //[HttpPut("{id}")]
-        //public User Put(int id, [FromBody] User value)
-        //{
-        //    int index = _userService.GetList().FindIndex(x => x.UserID == id);
-        //    _userService.GetList()[index].UserName = value.UserName;
-        //    _userService.GetList()[index].Password = value.Password;
-        //    _userService.GetList()[index].Email = value.Email;
-        //    _userService.GetList()[index].Role = value.Role;
-        //    return _userService.GetList()[index];
-        //}
+        [HttpPut("{id}")]
+        [Authorize(Roles = "manager, user, subscription")]
+        public async Task<ActionResult> Put(int id, [FromBody] UserPostModel user)
+        {
+            var us = _mapper.Map<User>(user);
+            var u = await _userService.UpdateAsync(us, id);
+            return Ok(u);
+        }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "manager, user, subscription")]
         public async Task<ActionResult> Delete(int id)
         {
             var user = await _userService.DeleteAsync(id);

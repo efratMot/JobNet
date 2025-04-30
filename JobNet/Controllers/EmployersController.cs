@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JobNet.Core.DTOs;
 using JobNet.Core.Entities;
 using JobNet.Core.Services;
 using JobNet.Models;
@@ -12,7 +13,7 @@ namespace JobNet.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
 
     public class EmployersController : ControllerBase
     {
@@ -30,14 +31,17 @@ namespace JobNet.Controllers
 
         // GET: api/<EmployersController>
         [HttpGet]
+        [Authorize(Roles = "manager")]
         public async Task<ActionResult> Get()
         {
             var employers = await _employerService.GetAllAsync();
-            return Ok(employers);
+            var employersDto=_mapper.Map<IEnumerable<EmployerDto>>(employers);
+            return Ok(employersDto);
         }
 
         // GET api/<EmployersController>/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "manager, employer")]
         public ActionResult Get(int id)
         {
             var employer = _employerService.Get(id);
@@ -45,11 +49,13 @@ namespace JobNet.Controllers
             {
                 return NotFound();
             }
-            return Ok(employer);
+            var employerDto=_mapper.Map<EmployerDto>(employer);
+            return Ok(employerDto);
         }
 
         // POST api/<EmployersController>
         [HttpPost]
+        
         public async Task<ActionResult> Post([FromBody] EmployerPostModel value)
         {
             var user=new User { UserName = value.UserName,Password=value.Password,Email=value.Email,Role=eRole.employer };
@@ -67,19 +73,19 @@ namespace JobNet.Controllers
         }
 
         // PUT api/<EmployersController>/5
-        //[HttpPut("{id}")]
-        //public Employer Put(int id, [FromBody] Employer value)
-        //{
-        //    int index = _employerService.GetList().FindIndex(x => x.EmployerID == id);
-        //    _employerService.GetList()[index].UserID = value.UserID;
-        //    _employerService.GetList()[index].CompanyName = value.CompanyName;
-        //    _employerService.GetList()[index].Industry = value.Industry;
-        //    return _employerService.GetList()[index];
-
-        //}
+        [HttpPut("{id}")]
+        [Authorize(Roles = "manager, employer")]
+        public async Task<ActionResult> Put(int id, [FromBody] EmployerPutModel employer)
+        {
+            var emp = _mapper.Map<Employer>(employer);
+            var e = await _employerService.UpdateAsync(emp,id);
+            var em= _mapper.Map<EmployerDto>(e);
+            return Ok(em);
+        }
 
         //// DELETE api/<EmployersController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "manager, employer")]
         public async Task<ActionResult> Delete(int id)
         {
            var employer= await _employerService.DeleteAsync(id);

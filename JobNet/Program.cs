@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using JobNet.Core.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +65,17 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
         };
     });
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("RequireSubscriber", policy =>
+//        policy.RequireClaim("eRole", eRole.subscription.ToString(), eRole.manager.ToString()));
+//    options.AddPolicy("RequireEmployer", policy =>
+//        policy.RequireClaim("eRole", eRole.employer.ToString(), eRole.manager.ToString()));
+//    options.AddPolicy("RequireManager", policy =>
+//    policy.RequireClaim("eRole", eRole.manager.ToString()));
+//    options.AddPolicy("RequireUser", policy =>
+//    policy.RequireClaim("eRole", eRole.user.ToString(), eRole.manager.ToString()));
+//});
 
 // Add services to the container.
 
@@ -94,7 +106,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 //builder.Services.AddSingleton<DataContext>();
 builder.Services.AddDbContext<DataContext>();
-builder.Services.AddAutoMapper(typeof(MappingProfile),typeof(MappingPostModel));
+builder.Services.AddAutoMapper(typeof(MappingProfile),typeof(MappingPostModel),typeof(MappingPutModel));
 
 
 

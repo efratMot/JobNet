@@ -9,9 +9,9 @@ namespace JobNet.Core.DTOs
 {
     public class JobDto
     {
-        public int JobID { get; set; }
+        //public int JobID { get; set; }
 
-        public int EmployerID { get; set; }
+        //public int EmployerID { get; set; }
 
         public EmployerDto Employer { get; set; }
 

@@ -9,7 +9,7 @@ namespace JobNet.Core.DTOs
 {
     public class UserDto
     {
-        public int UserID { get; set; }
+        ////public int UserID { get; set; }
 
         public string UserName { get; set; }
 

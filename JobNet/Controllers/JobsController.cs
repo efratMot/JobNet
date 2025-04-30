@@ -3,6 +3,8 @@ using JobNet.Core.DTOs;
 using JobNet.Core.Entities;
 using JobNet.Core.Services;
 using JobNet.Models;
+using JobNet.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -47,6 +49,7 @@ namespace JobNet.Controllers
 
         // POST api/<JobsController>
         [HttpPost]
+        [Authorize(Roles = "employer")]
         public async Task<ActionResult> Post([FromBody] JobPostModel value)
         {
             var job=_mapper.Map<Job>(value);
@@ -61,22 +64,18 @@ namespace JobNet.Controllers
 
 
         // PUT api/<JobsController>/5
-        //[HttpPut("{id}")]
-        //    public Job Put(int id, [FromBody] Job value)
-        //    {
-        //        int index = _jobService.GetList().FindIndex(x => x.JobID == id);
-        //        _jobService.GetList()[index].JobID = value.JobID;
-        //        _jobService.GetList()[index].EmployerID = value.EmployerID;
-        //        _jobService.GetList()[index].Title = value.Title;
-        //        _jobService.GetList()[index].Description = value.Description;
-        //        _jobService.GetList()[index].Location = value.Location;
-        //        _jobService.GetList()[index].Salary = value.Salary;
-        //        _jobService.GetList()[index].PostedDate = value.PostedDate;
-        //        return _jobService.GetList()[index];
-        //    }
+        [HttpPut("{id}")]
+        [Authorize(Roles = "manager, employer")]
+        public async Task<ActionResult> Put(int id, [FromBody] JobPutModel value)
+        {
+            var job = _mapper.Map<Job>(value);
+            var j = await _jobService.UpdateAsync(job, id);
+            return Ok(j);
+        }
 
         //    // DELETE api/<JobsController>/5
-         [HttpDelete("{id}")]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "manager, employer")]
         public async Task<ActionResult> Delete(int id)
         {
             var job = await _jobService.DeleteAsync(id);

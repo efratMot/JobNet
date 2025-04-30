@@ -15,6 +15,8 @@ namespace JobNet.Core.Services
 
         public Task<User> AddAsync(User user);
         public Task<User> DeleteAsync(int id);
+        public Task<User> UpdateAsync(User user, int id);
+
 
     }
 }
