@@ -37,9 +37,9 @@ namespace JobNet.Data.Repositories
             }
         }
 
-        public User GetUserByLogin(string username, string password)
+        public User GetUserByLogin(string email, string password)
         {
-            return _context.Users.FirstOrDefault(u => u.UserName == username && u.Password == password);
+            return _context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
         }
 
         public async Task<User> AddAsync(User user)

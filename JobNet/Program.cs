@@ -18,6 +18,18 @@ using JobNet.Core.Entities;
 var builder = WebApplication.CreateBuilder(args);
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:8080") // Your frontend origin
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
+
 // Add services to the container.
 builder.Services.AddSwaggerGen(options =>
 {
@@ -123,6 +135,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Add CORS middleware here - this must be before Authentication/Authorization
+app.UseCors("AllowFrontend");
+
+
 app.UseAuthentication();
 
 app.UseAuthorization();
@@ -139,3 +155,5 @@ app.Use(async (context, next) =>
 app.MapControllers();
 
 app.Run();
+
+

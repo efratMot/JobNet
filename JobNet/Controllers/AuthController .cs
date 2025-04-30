@@ -28,8 +28,8 @@ namespace JobNet.Controllers
         [HttpPost]
         public IActionResult Login([FromBody] LoginModel loginModel)
         {
-            var user = _userRepository.GetUserByLogin(loginModel.UserName, loginModel.Password);
-            if (loginModel.UserName == "efrat" && loginModel.Password == "123456")
+            var user = _userRepository.GetUserByLogin(loginModel.Email, loginModel.Password);
+            if (loginModel.Email == "efrat@gmail.com" && loginModel.Password == "123456")
             {
                 var claims = new List<Claim>()
                 {
@@ -47,7 +47,7 @@ namespace JobNet.Controllers
                     signingCredentials: signinCredentials
                 );
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-                return Ok(new { Token = tokenString });
+                return Ok(new { Token = tokenString,User=user });
             }
             else if (user != null)
             {
@@ -65,7 +65,7 @@ namespace JobNet.Controllers
                     signingCredentials: signinCredentials
                 );
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-                return Ok(new { Token = tokenString });
+                return Ok(new { Token = tokenString,User=user });
             }
             return Unauthorized();
         }
